@@ -24,15 +24,57 @@ namespace ConstructionLine.CodingChallenge.Tests
         }
 
 
-        [Test]
-        public void PerformanceTest()
+        [Test] public void PerformanceTest_AllColorsOnly()
         {
             var sw = new Stopwatch();
             sw.Start();
 
             var options = new SearchOptions
             {
-                Colors = new List<Color> { Color.Red }
+                Colors = Color.All
+            };
+
+            var results = _searchEngine.Search(options);
+
+            sw.Stop();
+            Console.WriteLine($"Test fixture finished in {sw.ElapsedMilliseconds} milliseconds");
+
+            AssertResults(results.Shirts, options);
+            AssertSizeCounts(_shirts, options, results.SizeCounts);
+            AssertColorCounts(_shirts, options, results.ColorCounts);
+        }
+        
+        [Test]
+        public void PerformanceTest_AllSizesOnly()
+        {
+            var sw = new Stopwatch();
+            sw.Start();
+
+            var options = new SearchOptions
+            {
+                Sizes = Size.All
+            };
+
+            var results = _searchEngine.Search(options);
+
+            sw.Stop();
+            Console.WriteLine($"Test fixture finished in {sw.ElapsedMilliseconds} milliseconds");
+
+            AssertResults(results.Shirts, options);
+            AssertSizeCounts(_shirts, options, results.SizeCounts);
+            AssertColorCounts(_shirts, options, results.ColorCounts);
+        }
+        
+        [Test]
+        public void PerformanceTest_BothSizesAndColorsOptions()
+        {
+            var sw = new Stopwatch();
+            sw.Start();
+
+            var options = new SearchOptions
+            {
+                Colors = new List<Color> { Color.Red, Color.Blue },
+                Sizes = new List<Size> { Size.Small, Size.Large }
             };
 
             var results = _searchEngine.Search(options);
